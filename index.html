@@ -5,58 +5,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bilgi Formu</title>
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f1f3f5;
+            margin: 0;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            background: #f0f2f5;
+            font-family: Arial, sans-serif;
+            padding: 20px;
         }
 
         .form {
+            width: 100%;
+            max-width: 390px;
             background: white;
             padding: 30px;
-            border-radius: 12px;
-            width: 300px;
-            box-shadow: 0 4px 15px #0001;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
-        input, button {
-            box-sizing: border-box;
-            width: 100%;
-            padding: 12px;
-            margin-top: 12px;
-            border-radius: 6px;
+        h2 {
+            margin-top: 0;
         }
 
         input {
+            width: 100%;
+            padding: 13px;
+            margin: 6px 0;
             border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
         }
 
         button {
-            background: #229ED9;
+            width: 100%;
+            padding: 13px;
+            margin-top: 18px;
+            background: #229ed9;
             color: white;
             border: none;
+            border-radius: 7px;
             cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        #sonuc {
+            margin-top: 14px;
+            line-height: 1.5;
         }
     </style>
 </head>
+
 <body>
 
     <div class="form">
         <h2>Bilgi Formu</h2>
+
         <p>Adınızı ve soyadınızı girin.</p>
 
-        <form>
-            <input type="text" placeholder="Adınız" required>
-            <input type="text" placeholder="Soyadınız" required>
+        <form id="bilgiForm">
+
+            <input
+                type="text"
+                id="ad"
+                name="ad"
+                placeholder="Adınız"
+                required
+                maxlength="50"
+            >
+
+            <input
+                type="text"
+                id="soyad"
+                name="soyad"
+                placeholder="Soyadınız"
+                required
+                maxlength="50"
+            >
+
             <p>Gönderdiğiniz bilgiler Telegram üzerinden site yöneticisine iletilecektir.</p>
-            <button type="submit">Gönder</button>
+
+            <button type="submit" id="gonder">
+                Gönder
+            </button>
+
         </form>
+
+        <p id="sonuc" role="status"></p>
     </div>
+
+    <script>
+        const form = document.getElementById("bilgiForm");
+
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const ad = document.getElementById("ad").value.trim();
+            const soyad = document.getElementById("soyad").value.trim();
+            const buton = document.getElementById("gonder");
+            const sonuc = document.getElementById("sonuc");
+
+            if (!ad || !soyad) {
+                sonuc.textContent = "Lütfen tüm alanları doldurun.";
+                return;
+            }
+
+            buton.disabled = true;
+            sonuc.textContent = "Gönderiliyor...";
+
+            try {
+                const cevap = await fetch("/api/send", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        ad: ad,
+                        soyad: soyad
+                    })
+                });
+
+                const veri = await cevap.json();
+
+                if (!cevap.ok || !veri.success) {
+                    throw new Error(veri.error || "Gönderim başarısız.");
+                }
+
+                sonuc.textContent = "Bilgileriniz başarıyla gönderildi.";
+                form.reset();
+
+            } catch (hata) {
+                sonuc.textContent = "Gönderilemedi: " + hata.message;
+
+            } finally {
+                buton.disabled = false;
+            }
+        });
+    </script>
 
 </body>
 </html>
