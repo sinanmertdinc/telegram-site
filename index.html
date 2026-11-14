@@ -2,158 +2,190 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilgi Formu</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #f0f2f5;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-
-        .form {
-            width: 100%;
-            max-width: 390px;
-            background: white;
-            padding: 30px;
-            border-radius: 14px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        h2 {
-            margin-top: 0;
-        }
-
-        input {
-            width: 100%;
-            padding: 13px;
-            margin: 6px 0;
-            border: 1px solid #ccc;
-            border-radius: 7px;
-            font-size: 15px;
-        }
-
-        button {
-            width: 100%;
-            padding: 13px;
-            margin-top: 18px;
-            background: #229ed9;
-            color: white;
-            border: none;
-            border-radius: 7px;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
-
-        #sonuc {
-            margin-top: 14px;
-            line-height: 1.5;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beşiktaş Taraftar Anketi</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: #fff;
+    min-height: 100vh;
+    padding: 30px 15px;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    color: #111;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px #0008;
+}
+.header {
+    background: #050505;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    border-bottom: 5px solid #d71920;
+}
+.eagle { font-size: 45px; }
+.header h1 { margin: 10px 0; }
+.header p { color: #ccc; margin-bottom: 0; }
+form { padding: 25px; }
+.question { margin-bottom: 24px; }
+label, .question-title {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+textarea { resize: vertical; }
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0;
+    font-weight: normal;
+}
+.radio-option input { width: auto; }
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #050505;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+button:hover { background: #d71920; }
+button:disabled { opacity: .6; cursor: wait; }
+#message {
+    text-align: center;
+    margin-top: 15px;
+    font-weight: bold;
+}
+.footer {
+    text-align: center;
+    padding: 15px;
+    color: #777;
+    font-size: 12px;
+}
+</style>
 </head>
-
 <body>
-
-    <div class="form">
-        <h2>Bilgi Formu</h2>
-
-        <p>Adınızı ve soyadınızı girin.</p>
-
-        <form id="bilgiForm">
-
-            <input
-                type="text"
-                id="ad"
-                name="ad"
-                placeholder="Adınız"
-                required
-                maxlength="50"
-            >
-
-            <input
-                type="text"
-                id="soyad"
-                name="soyad"
-                placeholder="Soyadınız"
-                required
-                maxlength="50"
-            >
-
-            <p>Gönderdiğiniz bilgiler Telegram üzerinden site yöneticisine iletilecektir.</p>
-
-            <button type="submit" id="gonder">
-                Gönder
-            </button>
-
-        </form>
-
-        <p id="sonuc" role="status"></p>
+<div class="container">
+    <div class="header">
+        <div class="eagle">🦅</div>
+        <h1>BEŞİKTAŞ TARAFTAR ANKETİ</h1>
+        <p>Senin gözünden Beşiktaş!</p>
     </div>
 
-    <script>
-        const form = document.getElementById("bilgiForm");
+    <form id="surveyForm">
+        <div class="question">
+            <label for="name">1. Adın ve soyadın</label>
+            <input id="name" name="name" type="text" maxlength="80" required>
+        </div>
 
-        form.addEventListener("submit", async function(event) {
-            event.preventDefault();
+        <div class="question">
+            <label for="player">2. En sevdiğin Beşiktaş futbolcusu kim?</label>
+            <input id="player" name="player" type="text" maxlength="80" required>
+        </div>
 
-            const ad = document.getElementById("ad").value.trim();
-            const soyad = document.getElementById("soyad").value.trim();
-            const buton = document.getElementById("gonder");
-            const sonuc = document.getElementById("sonuc");
+        <div class="question">
+            <span class="question-title">3. Sence Beşiktaş'ın en büyük özelliği nedir?</span>
+            <label class="radio-option">
+                <input type="radio" name="quality" value="Taraftar gücü" required>
+                Taraftar gücü
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="quality" value="Tarihi ve gelenekleri">
+                Tarihi ve gelenekleri
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="quality" value="Mücadele ruhu">
+                Mücadele ruhu
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="quality" value="Hepsi">
+                Hepsi
+            </label>
+        </div>
 
-            if (!ad || !soyad) {
-                sonuc.textContent = "Lütfen tüm alanları doldurun.";
-                return;
-            }
+        <div class="question">
+            <label for="years">4. Kaç yıldır Beşiktaş taraftarısın?</label>
+            <select id="years" name="years" required>
+                <option value="">Seçimini yap</option>
+                <option>1 yıldan az</option>
+                <option>1-5 yıl</option>
+                <option>5-10 yıl</option>
+                <option>10-20 yıl</option>
+                <option>20 yıldan fazla</option>
+            </select>
+        </div>
 
-            buton.disabled = true;
-            sonuc.textContent = "Gönderiliyor...";
+        <div class="question">
+            <label for="memory">5. Beşiktaş ile ilgili unutamadığın anın nedir?</label>
+            <textarea id="memory" name="memory" rows="4" maxlength="500" required></textarea>
+        </div>
 
-            try {
-                const cevap = await fetch("/api/send", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        ad: ad,
-                        soyad: soyad
-                    })
-                });
+        <button id="submitButton" type="submit">ANKETİ GÖNDER</button>
+        <div id="message" role="status"></div>
+    </form>
 
-                const veri = await cevap.json();
+    <div class="footer">
+        Gönderdiğin yanıtlar anket yöneticisine Telegram üzerinden iletilir.
+    </div>
+</div>
 
-                if (!cevap.ok || !veri.success) {
-                    throw new Error(veri.error || "Gönderim başarısız.");
-                }
+<script>
+const form = document.getElementById("surveyForm");
+const button = document.getElementById("submitButton");
+const message = document.getElementById("message");
 
-                sonuc.textContent = "Bilgileriniz başarıyla gönderildi.";
-                form.reset();
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
 
-            } catch (hata) {
-                sonuc.textContent = "Gönderilemedi: " + hata.message;
+    button.disabled = true;
+    button.textContent = "Gönderiliyor...";
+    message.textContent = "";
 
-            } finally {
-                buton.disabled = false;
-            }
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    try {
+        const response = await fetch("/api/send", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
         });
-    </script>
 
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || "Gönderim başarısız.");
+        }
+
+        message.textContent = "Anketin başarıyla gönderildi! 🦅";
+        message.style.color = "green";
+        form.reset();
+    } catch (error) {
+        message.textContent = error.message || "Bir hata oluştu.";
+        message.style.color = "red";
+    } finally {
+        button.disabled = false;
+        button.textContent = "ANKETİ GÖNDER";
+    }
+});
+</script>
 </body>
 </html>
