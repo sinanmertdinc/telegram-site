@@ -1,37 +1,46 @@
 
 export default async function handler(req, res) {
+
     if (req.method !== "POST") {
         return res.status(405).json({
+            success: false,
             error: "Method not allowed"
         });
     }
 
-    const { ad, soyad } = req.body || {};
-
-    if (
-        typeof ad !== "string" ||
-        typeof soyad !== "string" ||
-        !ad.trim() ||
-        !soyad.trim() ||
-        ad.length > 60 ||
-        soyad.length > 60
-    ) {
-        return res.status(400).json({
-            error: "Geçerli ad ve soyad girin."
-        });
-    }
-
-    const token = process.env.TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID;
-
-    if (!token || !chatId) {
-        return res.status(500).json({
-            error: "Sunucu ayarları eksik."
-        });
-    }
-
     try {
-        const response = await fetch(
+        const token = process.env.TELEGRAM_BOT_TOKEN;
+        const chatId = process.env.TELEGRAM_CHAT_ID;
+
+        if (!token || !chatId) {
+            return res.status(500).json({
+                success: false,
+                error: "Sunucu ayarları eksik."
+            });
+        }
+
+        const { ad, soyad } = req.body || {};
+
+        if (
+            typeof ad !== "string" ||
+            typeof soyad !== "string" ||
+            !ad.trim() ||
+            !soyad.trim() ||
+            ad.length > 50 ||
+            soyad.length > 50
+        ) {
+            return res.status(400).json({
+                success: false,
+                error: "Geçersiz form bilgisi."
+            });
+        }
+
+        const mesaj =
+            "Yeni form gönderimi\n\n" +
+            "Ad: " + ad.trim() + "\n" +
+            "Soyad: " + soyad.trim();
+
+        const telegram = await fetch(
             `https://api.telegram.org/bot${token}/sendMessage`,
             {
                 method: "POST",
@@ -40,16 +49,17 @@ export default async function handler(req, res) {
                 },
                 body: JSON.stringify({
                     chat_id: chatId,
-                    text: `Yeni form gönderildi:\nAd: ${ad.trim()}\nSoyad: ${soyad.trim()}`
+                    text: mesaj
                 })
             }
         );
 
-        const result = await response.json();
+        const sonuc = await telegram.json();
 
-        if (!response.ok || !result.ok) {
+        if (!telegram.ok || !sonuc.ok) {
             return res.status(502).json({
-                error: "Telegram gönderimi başarısız."
+                success: false,
+                error: "Telegram mesajı gönderilemedi."
             });
         }
 
@@ -59,6 +69,7 @@ export default async function handler(req, res) {
 
     } catch (error) {
         return res.status(500).json({
+            success: false,
             error: "Sunucu hatası."
         });
     }
