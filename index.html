@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilgi Formu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f3f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .form {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 300px;
+            box-shadow: 0 4px 15px #0001;
+        }
+
+        input, button {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 6px;
+        }
+
+        input {
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #229ED9;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form">
+        <h2>Bilgi Formu</h2>
+        <p>Adınızı ve soyadınızı girin.</p>
+
+        <form>
+            <input type="text" placeholder="Adınız" required>
+            <input type="text" placeholder="Soyadınız" required>
+            <p>Gönderdiğiniz bilgiler Telegram üzerinden site yöneticisine iletilecektir.</p>
+            <button type="submit">Gönder</button>
+        </form>
+    </div>
+
+</body>
+</html>
